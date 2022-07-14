@@ -7,7 +7,7 @@ from vues.base import Vue
 def main():
     vue = Vue()
     gestion_tournoi = Controller(vue)
-    gestion_tournoi.lancer()
+    gestion_tournoi.gerer_menu_principal()
 
 
 if __name__ == "__main__":

@@ -16,8 +16,9 @@ class Match:
         self.joueur_2 = joueur2
     
     def jouer_match(self):
-        nombre_aleatoire = randint(0,99)
-        if nombre_aleatoire < 33:
+        """Renvoi un résultat aléatoire du match"""
+        nombre_aleatoire = randint(1,99)
+        if nombre_aleatoire <= 33:
             self.joueur_score_1 = 1
             self.joueur_score_2 = 0
         elif nombre_aleatoire > 66:
@@ -26,7 +27,6 @@ class Match:
         else:
             self.joueur_score_1 = 0.5
             self.joueur_score_2 = 0.5
-        return (self.joueur_score_1, self.joueur_score_2)
 
     def __str__(self):
         return f"\n{self.joueur_1.nom} joue contre {self.joueur_2.nom}"
