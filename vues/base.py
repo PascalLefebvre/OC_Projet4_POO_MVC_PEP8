@@ -6,6 +6,10 @@ from models.donnees import joueurs_inscrits, NOM_TOURS
 class Vue:
     """Vue du tournoi d'échecs."""
 
+    def afficher_message(self, message):
+        """Affiche un message à la console"""
+        print(f"\n{message}")
+
     def saisir_choix(self, nombre_choix):
         try:
             choix = int(input("\nEntrez votre choix : "))
@@ -15,13 +19,18 @@ class Vue:
             return choix
         else:
             return None
+    
+    def saisir_reponse(self, message):
+        """Saisie la réponse de l'utilisateur."""
+        reponse = input(message)
+        return reponse
 
     def afficher_menu_principal(self):
         """Affiche le menu principal."""
         menu_principal = {
             1: "Créer un nouveau tournoi",
             2: "Gérer un tournoi",
-            3: "Mettre à jour le classement",
+            3: "Mettre à jour le classement des joueurs",
             4: "Editer les rapports",
             5: "Sauvegarder les données",
             6: "Restaurer les données",
@@ -40,7 +49,9 @@ class Vue:
     
     def afficher_liste_tournois(self, tournois):
         """Affiche la liste des tournois."""
-        print("\n<--- Choisissez le tournoi à gérer dans la liste ci-dessous :\n")
+        system('clear')
+        print("\n<--- GESTION DES TOURNOIS D'ECHECS --->")
+        print("\n\n<--- Choisissez le tournoi dans la liste ci-dessous :\n")
         for i in range(len(tournois)):
             print(f"{i+1} -- {tournois[i].nom}")
         print(f"0 -- Revenir au menu principal")
@@ -62,7 +73,7 @@ class Vue:
             1: "Inscrire les joueurs à un tournoi",
             2: "Générer les paires de joueurs pour un tour",
             3: "Saisir les résultats des matchs d'un tour",
-            0: "Revenir au menu principal"
+            0: "Revenir au menu précédent"
             }
         system('clear')
         print(f"<--- GESTION DU TOURNOI D'ECHEC {tournoi.nom} --->")

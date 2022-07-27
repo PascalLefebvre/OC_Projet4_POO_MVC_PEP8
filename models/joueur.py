@@ -12,5 +12,3 @@ class Joueur:
 
     def afficher_classement(self):
         print(f"\nLe joueur {self.nom} {self.prenom} a un classement de {self.classement}.")
-        
-
