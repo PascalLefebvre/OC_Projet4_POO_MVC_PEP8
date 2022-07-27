@@ -7,7 +7,7 @@ from models.joueur import Joueur
 from models.tournoi import Tournoi
 from models.tour import Tour
 from models.match import Match
-from .base import Controller
+from .base import Controleur
 
 class ControleurMenu:
     """Contrôleur des menus."""
@@ -15,16 +15,17 @@ class ControleurMenu:
     def __init__(self, view):
         """A une vue."""
         self.view = view
+        self.controleur = Controleur(self.view)
 
     def gerer_menu_tournoi(self):
         """Gère le menu de gestion d'un tournoi (inscription et association des joueurs et saisie des résultats)."""
         while True:
             # Sélection du tournoi à gérer
-            choix_tournoi = self.choisir_tournoi_a_gerer()
+            choix_tournoi = self.controleur.choisir_tournoi_a_gerer()
             if choix_tournoi == 0:
                 return
             # Décalage de "+1" entre le numéro du choix et l'indice du tournoi correspondant
-            tournoi_en_cours = self.tournois[choix_tournoi-1]
+            tournoi_en_cours = self.controleur.tournois[choix_tournoi-1]
             # Déclenche les actions du sous-menu de gestion d'un tournoi
             while True:
                 nombre_choix = self.view.afficher_menu_tournoi(tournoi_en_cours)
@@ -35,12 +36,12 @@ class ControleurMenu:
                 elif choix == 0:
                     break    
                 elif choix == 1:
-                    self.inscrire_joueurs(tournoi_en_cours)
+                    self.controleur.inscrire_joueurs(tournoi_en_cours)
                 elif choix == 2:
-                    tour_en_cours = self.creer_tour(tournoi_en_cours)
-                    self.appairer_joueurs(tournoi_en_cours, tour_en_cours)
+                    tour_en_cours = self.controleur.creer_tour(tournoi_en_cours)
+                    self.controleur.appairer_joueurs(tournoi_en_cours, tour_en_cours)
                 elif choix == 3:
-                    self.saisir_resultats_matchs(tournoi_en_cours)
+                    self.controleur.saisir_resultats_matchs(tournoi_en_cours)
 
     def gerer_menu_rapports(self):
         """Gère le menu d'édition des rapports."""
@@ -64,7 +65,7 @@ class ControleurMenu:
                 if reponse == 'o':
                     exit()                
             elif choix == 1:
-                self.creer_tournoi()
+                self.controleur.creer_tournoi()
             elif choix == 2:
                 self.gerer_menu_tournoi()
             elif choix == 3:
@@ -72,8 +73,8 @@ class ControleurMenu:
             elif choix == 4:
                 self.gerer_menu_rapports()
             elif choix == 5:
-                self.sauvegarder_donnees()
+                self.controleur.sauvegarder_donnees()
             elif choix == 6:
-                self.restaurer_donnees()
+                self.controleur.restaurer_donnees()
 
 
