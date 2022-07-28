@@ -17,6 +17,12 @@ class ControleurMenu:
         self.view = view
         self.controleur = Controleur(self.view)
 
+    def gerer_menu_tours(self):
+        """Gère le menu du choix du tour."""
+        choix = self.choisir_tour()
+        if choix != 0:
+            pass
+
     def gerer_menu_tournoi(self):
         """Gère le menu de gestion d'un tournoi (inscription et association des joueurs et saisie des résultats)."""
         while True:

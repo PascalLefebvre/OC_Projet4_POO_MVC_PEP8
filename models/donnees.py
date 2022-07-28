@@ -4,7 +4,7 @@ NOMBRE_JOUEURS = 8
 NOM_TOURS = ("Round1", "Round2", "Round3", "Round4")
 NOMBRE_TOURS = len(NOM_TOURS)
 NOMBRE_MATCHS = 3
-NOM_FICHIER_STOCKAGE = 'data.pickle'
+NOM_FICHIER_STOCKAGE = 'db.pickle'
 
 joueurs = [("Aupont", "Jean", "12/11/2000", "M", 150),
            ("Baron", "Philippe", "13/08/1980", "M", 275),

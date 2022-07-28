@@ -1,4 +1,4 @@
 .vscode/
 env/
 __pycache__
-data.pickle
+db.pickle*

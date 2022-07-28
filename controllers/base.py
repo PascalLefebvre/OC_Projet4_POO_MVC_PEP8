@@ -3,6 +3,7 @@
 import time
 from random import randint
 from tinydb import TinyDB
+# import pickle
 
 from models.donnees import NOMBRE_JOUEURS, NOM_TOURS, NOMBRE_MATCHS, NOM_FICHIER_STOCKAGE, joueurs
 from models.joueur import Joueur
@@ -149,43 +150,42 @@ class Controleur:
 
     def saisir_resultats_matchs(self, tournoi):
         choix = self.choisir_tour()
-        tour = tournoi.tours[choix-1]
-        self.jouer_matchs(tour, tour.paires_joueurs)
-        self.calculer_points(tournoi, tour.matchs)
-        tour.ajouter_date_heure_fin(time.asctime())
-        self.view.afficher_points(tournoi, tour)
+        if choix != 0:
+            tour = tournoi.tours[choix-1]
+            self.jouer_matchs(tour, tour.paires_joueurs)
+            self.calculer_points(tournoi, tour.matchs)
+            tour.ajouter_date_heure_fin(time.asctime())
+            self.view.afficher_points(tournoi, tour)
 
     def sauvegarder_donnees(self):
-        """Problème du 'None' lors du print du classement des joueurs par exemple"""
-           
         """Sauvegarde les joueurs et les tournois."""
-        self.initialiser_liste_joueurs()
-        with TinyDB(NOM_FICHIER_STOCKAGE, storage=StoragePickle) as db:
-            db.truncate()
-            db.storage.write(self.joueurs)
-            db.storage.write(self.tournois)
-            message = "Sauvegarde effectuée"
-            self.view.afficher_message(message)
-            input("Continuer ...")
-            """table_joueurs = db.table('joueurs')
-            table_joueurs.truncate()
-            table_joueurs.storage.write(self.joueurs)
-            table_tournois = db.table('tournois')
-            table_tournois.truncate()
-            table_tournois.storage.write(self.tournois)
-            message = "Sauvegarde effectuée"
-            self.view.afficher_message(message)
-            input("Continuer ...")"""
+        # self.initialiser_liste_joueurs()
+        db = TinyDB(NOM_FICHIER_STOCKAGE, storage=StoragePickle)
+        table_joueurs = db.table('joueurs')
+        table_joueurs.truncate()
+        for joueur in self.joueurs:
+            table_joueurs.insert({'type' : 'joueur', 'valeur' : joueur})
+        table_tournois = db.table('tournois')
+        table_tournois.truncate()
+        for tournoi in self.tournois:
+            table_tournois.insert({'type' : 'tournoi', 'valeur' : tournoi})
+        db.close()
+        message = "Sauvegarde effectuée"
+        self.view.afficher_message(message)
+        input("Continuer ...")
 
     def restaurer_donnees(self):
         """Restaure les joueurs et les tournois"""
-
-        with TinyDB(NOM_FICHIER_STOCKAGE, storage=StoragePickle) as db:
-            db.storage.read()
-            input("Continuer ...")
-            """# table_joueurs.storage.read()
-            table_joueurs.all()
-            input("Continuer ...")
-            # table_tournois.storage.read()
-            table_tournois.all()
-            input("Continuer ...")"""
+        db = TinyDB(NOM_FICHIER_STOCKAGE, storage=StoragePickle)
+        table_joueurs = db.table('joueurs')
+        liste_joueurs = table_joueurs.all()
+        for i in range(len(liste_joueurs)):
+            self.joueurs.append(liste_joueurs[i]['valeur'])
+            print(self.joueurs[i].nom)
+        table_tournois = db.table('tournois')
+        liste_tournois = table_tournois.all()
+        for i in range(len(liste_tournois)):
+            self.tournois.append(liste_tournois[i]['valeur'])
+            print(self.tournois[i].nom)
+        db.close()
+        input("Continuer ...")
