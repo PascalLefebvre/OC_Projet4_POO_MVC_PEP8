@@ -1,13 +1,9 @@
 """Definit le contrôleur des menus de l'application."""
 
-import time
-
-from models.donnees import NOMBRE_JOUEURS, NOM_TOURS, NOMBRE_MATCHS
-from models.joueur import Joueur
-from models.tournoi import Tournoi
-from models.tour import Tour
-from models.match import Match
-from .base import Controleur
+from .donnees import ControleurDonnees
+from .match import ControleurMatch
+from .tour import ControleurTour
+from .donnees import ControleurDonnees
 
 class ControleurMenu:
     """Contrôleur des menus."""
@@ -15,7 +11,20 @@ class ControleurMenu:
     def __init__(self, view):
         """A une vue."""
         self.view = view
-        self.controleur = Controleur(self.view)
+        self.controleur_match = ControleurMatch(self.view)
+        self.controleur_tour = ControleurTour(self.view)
+        self.controleur_donnees = ControleurDonnees(self.view)
+    
+    def gerer_menu_liste_tournois(self):
+        """Choisit le tournoi à gérer"""
+        self.view.afficher_liste_tournois(self.controleur_donnees.tournois)
+        nombre_choix = len(self.controleur_donnees.tournois)+1
+        choix = self.view.saisir_choix(nombre_choix)
+        if choix == None:
+            message = "Choix invalide. Merci d'entrer un chiffre entre 0 et " + str(nombre_choix-1)
+            self.view.afficher_message(message)
+        else:
+            return choix
 
     def gerer_menu_tours(self):
         """Gère le menu du choix du tour."""
@@ -27,11 +36,11 @@ class ControleurMenu:
         """Gère le menu de gestion d'un tournoi (inscription et association des joueurs et saisie des résultats)."""
         while True:
             # Sélection du tournoi à gérer
-            choix_tournoi = self.controleur.choisir_tournoi_a_gerer()
+            choix_tournoi = self.gerer_menu_liste_tournois()
             if choix_tournoi == 0:
                 return
             # Décalage de "+1" entre le numéro du choix et l'indice du tournoi correspondant
-            tournoi_en_cours = self.controleur.tournois[choix_tournoi-1]
+            tournoi_en_cours = self.controleur_donnees.tournois[choix_tournoi-1]
             # Déclenche les actions du sous-menu de gestion d'un tournoi
             while True:
                 nombre_choix = self.view.afficher_menu_tournoi(tournoi_en_cours)
@@ -42,12 +51,14 @@ class ControleurMenu:
                 elif choix == 0:
                     break    
                 elif choix == 1:
-                    self.controleur.inscrire_joueurs(tournoi_en_cours)
+                    self.controleur_donnees.inscrire_joueurs(tournoi_en_cours)
                 elif choix == 2:
-                    tour_en_cours = self.controleur.creer_tour(tournoi_en_cours)
-                    self.controleur.appairer_joueurs(tournoi_en_cours, tour_en_cours)
+                    tour_en_cours = self.controleur_tour.creer_tour(tournoi_en_cours)
+                    self.controleur_tour.appairer_joueurs(tournoi_en_cours, tour_en_cours)
                 elif choix == 3:
-                    self.controleur.saisir_resultats_matchs(tournoi_en_cours)
+                    choix_tour = self.controleur_tour.choisir_tour()
+                    if choix_tour != 0:
+                        self.controleur_match.saisir_resultats_matchs(tournoi_en_cours, choix_tour)
 
     def gerer_menu_rapports(self):
         """Gère le menu d'édition des rapports."""
@@ -71,7 +82,7 @@ class ControleurMenu:
                 if reponse == 'o':
                     exit()                
             elif choix == 1:
-                self.controleur.creer_tournoi()
+                self.controleur_donnees.creer_tournoi()
             elif choix == 2:
                 self.gerer_menu_tournoi()
             elif choix == 3:
@@ -79,8 +90,8 @@ class ControleurMenu:
             elif choix == 4:
                 self.gerer_menu_rapports()
             elif choix == 5:
-                self.controleur.sauvegarder_donnees()
+                self.controleur_donnees.sauvegarder_donnees()
             elif choix == 6:
-                self.controleur.restaurer_donnees()
+                self.controleur_donnees.restaurer_donnees()
 
 

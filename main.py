@@ -1,6 +1,5 @@
 """Point d'entrée"""
 
-# from controllers.base import Controleur
 from controllers.menu import ControleurMenu
 from vues.base import Vue
 
