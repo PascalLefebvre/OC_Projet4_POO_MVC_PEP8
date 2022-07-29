@@ -10,5 +10,5 @@ class Joueur:
         self.sexe = sexe
         self.classement = classement
 
-    def afficher_classement(self):
-        print(f"\nLe joueur {self.nom} {self.prenom} a un classement de {self.classement}.")
+    def __str__(self):
+        return f"\nLe joueur {self.nom} {self.prenom} a un classement de {self.classement}."

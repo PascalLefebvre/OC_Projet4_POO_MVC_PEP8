@@ -18,8 +18,8 @@ class ControleurDonnees:
 
     def creer_tournoi(self):
         """Crée un tournoi."""
-        nom, lieu, description, date_debut, controle_temps = self.view.saisir_tournoi()
-        self.tournois.append(Tournoi(nom, lieu, description, date_debut, controle_temps))
+        nom, lieu, description, date_debut, date_fin, controle_temps = self.view.saisir_tournoi()
+        self.tournois.append(Tournoi(nom, lieu, description, date_debut, date_fin, controle_temps))
         self.view.afficher_tournoi(self.tournois[-1])
 
     def inscrire_joueurs(self, tournoi):

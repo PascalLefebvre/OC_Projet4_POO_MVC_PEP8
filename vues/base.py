@@ -51,7 +51,7 @@ class Vue:
         """Affiche la liste des tournois."""
         system('clear')
         print("\n<--- GESTION DES TOURNOIS D'ECHECS --->")
-        print("\n\n<--- Choisissez le tournoi dans la liste ci-dessous :\n")
+        print("\n\nChoisissez un tournoi dans la liste ci-dessous :\n")
         for i in range(len(tournois)):
             print(f"{i+1} -- {tournois[i].nom}")
         print(f"0 -- Revenir au menu principal")
@@ -63,9 +63,12 @@ class Vue:
         name = input("\nle nom : ")
         lieu = input("\nle lieu : ")
         date_debut = input("\nla date de début : ")
+        date_fin = input(f"\nla date de fin ({date_debut} par défaut) : ")
+        if date_fin == "":
+            date_fin = date_debut
         controle_temps = input("\nle contrôle du temps (bullet, blitz ou coup rapide) : ")
         description = input("\nun commentaire : ")
-        return (name, lieu, description, date_debut, controle_temps)
+        return (name, lieu, description, date_debut, date_fin, controle_temps)
     
     def afficher_menu_tournoi(self, tournoi):
         """Affiche le menu de gestion d'un tournoi."""
@@ -92,7 +95,7 @@ class Vue:
     def afficher_classement_joueurs(self, joueurs):
         """Affiche le classement des joueurs du tournoi."""
         for joueur in joueurs:
-            joueur.afficher_classement()
+            print(joueur)
         input("\nTaper ENTREE pour continuer ...")
 
     def afficher_points_joueurs(self, joueurs, tournoi):
@@ -115,3 +118,21 @@ class Vue:
             index = tournoi.joueurs.index(joueur)
             print(f"\nLe joueur {joueur.nom} {joueur.prenom} a {tournoi.nombre_points[index]} points.")
         input("\nTaper ENTREE pour continuer ...")
+
+    def afficher_menu_rapports(self):
+        """Affiche le menu des rapports."""
+        menu_rapports = {
+            1: "Liste de tous les joueurs (par ordre alphabétique)",
+            2: "Liste de tous les joueurs (par classement)",
+            3: "Liste de tous les tournois",
+            4: "Liste de tous les joueurs d'un tournoi (par ordre alphabétique)",
+            5: "Liste de tous les joueurs d'un tournoi (par classement)",
+            6: "Liste de tous les tours d'un tournoi",
+            7: "Liste de tous les matchs d'un tournoi",
+            0: "Revenir au menu principal"
+            }
+        system('clear')
+        print("\n<--- EDITION DES RAPPORTS --->\n")
+        for cle in menu_rapports.keys():
+            print('\n', cle, '--', menu_rapports[cle])
+        return len(menu_rapports.keys())

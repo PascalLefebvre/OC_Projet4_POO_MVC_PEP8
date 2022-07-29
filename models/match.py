@@ -13,4 +13,4 @@ class Match:
         self.joueur_2 = joueur2
     
     def __str__(self):
-        return f"\n{self.joueur_1.nom} joue contre {self.joueur_2.nom}"
+        return f"{self.joueur_1.nom} contre {self.joueur_2.nom} : {self.joueur_score_1} à {self.joueur_score_2}"

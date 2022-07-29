@@ -37,8 +37,9 @@ class ControleurMatch:
         message = "Les scores des matchs du " + tour.nom + " sont les suivants :\n"
         self.view.afficher_message(message)
         for match in tour.matchs:
-            message = match.joueur_1.nom + " contre " + match.joueur_2.nom + " : " \
-                      + str(match.joueur_score_1) + " à " + str(match.joueur_score_2)
+            """message = match.joueur_1.nom + " contre " + match.joueur_2.nom + " : " \
+                      + str(match.joueur_score_1) + " à " + str(match.joueur_score_2)"""
+            message = match.__str__()
             self.view.afficher_message(message)
 
     def calculer_points(self, tournoi, matchs):

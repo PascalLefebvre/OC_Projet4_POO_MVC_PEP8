@@ -5,7 +5,7 @@ from .donnees import NOMBRE_TOURS
 class Tournoi:
     """Classe Tournoi"""
 
-    def __init__(self, nom, lieu, description, date_debut, controle_temps, date_fin = '', nombre_tours = NOMBRE_TOURS):
+    def __init__(self, nom, lieu, description, date_debut, date_fin, controle_temps, nombre_tours = NOMBRE_TOURS):
         self.nom = nom
         self.lieu = lieu
         self.date_debut = date_debut
@@ -13,6 +13,7 @@ class Tournoi:
         self.nombre_tours = nombre_tours
         self.controle_temps = controle_temps
         self.description = description
+        self.statut = 'Ouvert'
         self.joueurs = []
         self.tours = []
         self.nombre_points = []
@@ -29,6 +30,6 @@ class Tournoi:
         self.nombre_points[index] += score
     
     def __str__(self):
-        return f"\nLe tournoi {self.nom} se déroulera le {self.date_debut} à {self.lieu} \
+        return f"\nLe tournoi {self.nom} se déroulera à {self.lieu} du {self.date_debut} au {self.date_fin}\
                  \nDescription : {self.description}\nContrôle du temps : {self.controle_temps}"
     
