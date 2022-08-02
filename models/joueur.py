@@ -9,6 +9,9 @@ class Joueur:
         self.date_naissance = date_naissance
         self.sexe = sexe
         self.classement = classement
+    
+    def modifier_classement(self, classement):
+        self.classement = classement
 
     def __str__(self):
         return f"\nLe joueur {self.nom} {self.prenom} a un classement de {self.classement}."

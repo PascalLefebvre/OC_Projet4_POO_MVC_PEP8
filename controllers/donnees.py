@@ -10,27 +10,48 @@ from utils.storage import StoragePickle
 class ControleurDonnees:
     """Contrôleur des données."""
 
-    def __init__(self, view):
+    def __init__(self, vue, vue_rapports):
         """A une vue."""
-        self.view = view
+        self.vue = vue
+        self.vue_rapports = vue_rapports
         self.tournois = []
         self.joueurs = []
 
     def creer_tournoi(self):
         """Crée un tournoi."""
-        nom, lieu, description, date_debut, date_fin, controle_temps = self.view.saisir_tournoi()
+        nom, lieu, description, date_debut, date_fin, controle_temps = self.vue.saisir_tournoi()
         self.tournois.append(Tournoi(nom, lieu, description, date_debut, date_fin, controle_temps))
-        self.view.afficher_tournoi(self.tournois[-1])
+        self.vue.afficher_tournoi(self.tournois[-1])
 
     def inscrire_joueurs(self, tournoi):
         """Inscrit quelques joueurs."""
+        if len(tournoi.joueurs) == NOMBRE_JOUEURS:
+            message = "\nLes joueurs sont déjà inscrits.\n\nAppuyer sur ENTREE pour continuer... "
+            self.vue.saisir_reponse(message)
+            return
+        message = "\n<-- INSCRIPTION au " + tournoi.nom + " de " + tournoi.lieu + " -->"
+        self.vue.afficher_message(message)
+        self.vue_rapports.afficher_liste_joueurs(self.joueurs, "ordre alphabetique")
         while len(tournoi.joueurs) < NOMBRE_JOUEURS:
-            nom, prenom, date_naissance, sexe, classement = self.view.saisir_joueur(len(tournoi.joueurs))
-            if not nom:
-                return
-            joueur = Joueur(nom, prenom, date_naissance, sexe, classement)
-            tournoi.ajouter_joueur(joueur)
-        self.view.afficher_classement_joueurs(tournoi.joueurs)
+            joueur_inscrit = None
+            message = "\nEntrez le nom du joueur à inscrire : "
+            nom = self.vue.saisir_reponse(message)
+            for i in range(len(self.joueurs)):
+                if nom.lower() == self.joueurs[i].nom.lower():
+                    joueur_inscrit = self.joueurs[i]
+                    message = "Ce joueur est déjà répertorié ..."
+                    self.vue.afficher_message(message)
+                    break
+            if joueur_inscrit == None:
+                    message = "Ce joueur n'est pas répertorié ..."
+                    self.vue.afficher_message(message)
+                    nom, prenom, date_naissance, sexe, classement = self.vue.saisir_joueur()
+                    joueur_inscrit = Joueur(nom, prenom, date_naissance, sexe, classement)
+                    self.joueurs.append(joueur_inscrit)
+            tournoi.ajouter_joueur(joueur_inscrit)
+            message = "Le joueur " + joueur_inscrit.nom + ' ' + joueur_inscrit.prenom \
+                        + " est inscrit au " + tournoi.nom + ' de ' + tournoi.lieu
+            self.vue.saisir_reponse(message)
 
     def sauvegarder_donnees(self):
         """Sauvegarde les joueurs et les tournois."""
@@ -45,9 +66,8 @@ class ControleurDonnees:
         for tournoi in self.tournois:
             table_tournois.insert({'type' : 'tournoi', 'valeur' : tournoi})
         db.close()
-        message = "Sauvegarde effectuée"
-        self.view.afficher_message(message)
-        input("Continuer ...")
+        message = "\nSauvegarde effectuée ...\n\nAppuyer sur ENTREE pour continuer ..."
+        self.vue.saisir_reponse(message)
 
     def restaurer_donnees(self):
         """Restaure les joueurs et les tournois"""
@@ -56,16 +76,19 @@ class ControleurDonnees:
         liste_joueurs = table_joueurs.all()
         for i in range(len(liste_joueurs)):
             self.joueurs.append(liste_joueurs[i]['valeur'])
-            print(self.joueurs[i].nom)
+            # print(self.joueurs[i].nom)
         table_tournois = db.table('tournois')
         liste_tournois = table_tournois.all()
         for i in range(len(liste_tournois)):
             self.tournois.append(liste_tournois[i]['valeur'])
-            print(self.tournois[i].nom)
+            # print(self.tournois[i].nom)
         db.close()
-        input("Continuer ...")
+        message = "\nRestauration effectuée ...\n\nAppuyer sur ENTREE pour continuer ..."
+        self.vue.saisir_reponse(message)
 
-    """def initialiser_liste_joueurs(self):
+    """
+    # Utiliser uniquement pour faciliter la création de la base de données initiale
+    def initialiser_liste_joueurs(self):
         # Initialise la liste des joueurs ayant déjà participé à un tournoi
         for i in range(len(joueurs)):
             nom = joueurs[i][0]
@@ -73,4 +96,5 @@ class ControleurDonnees:
             date_naissance = joueurs[i][2]
             sexe = joueurs[i][3]
             classement = joueurs[i][4]
-            self.joueurs.append(Joueur(nom, prenom, date_naissance, sexe, classement))"""
+            self.joueurs.append(Joueur(nom, prenom, date_naissance, sexe, classement))
+    """

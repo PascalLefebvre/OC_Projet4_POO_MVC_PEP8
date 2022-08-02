@@ -6,6 +6,8 @@ NOMBRE_TOURS = len(NOM_TOURS)
 NOMBRE_MATCHS = 3
 NOM_FICHIER_STOCKAGE = 'db.pickle'
 
+"""
+# Pour faciliter la création de la base de données initiale
 joueurs = [("Aupont", "Jean", "12/11/2000", "M", 150),
            ("Baron", "Philippe", "13/08/1980", "M", 275),
            ("Durand", "Pierre", "08/04/1998", "M", 200),
@@ -27,3 +29,4 @@ joueurs_inscrits = [("Aupont", "Jean", "12/11/2000", "M", 150),
                     ("Luboursin", "Claude", "30/11/1978", "M", 100),
                     ("Mupain", "Marcel", "11/12/1962", "M", 250),
                     ("Ruvin", "Annie", "10/05/1981", "F", 215)]
+"""

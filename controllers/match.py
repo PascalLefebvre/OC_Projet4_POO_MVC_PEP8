@@ -10,9 +10,9 @@ from models.match import Match
 class ControleurMatch:
     """Contrôleur des matchs."""
 
-    def __init__(self, view):
+    def __init__(self, vue):
         """A une vue."""
-        self.view = view
+        self.vue = vue
 
     def generer_resultat_match(self, match):
         """Génère un résultat aléatoire du match"""
@@ -35,12 +35,12 @@ class ControleurMatch:
                 self.generer_resultat_match(match)
                 tour.ajouter_match(match)
         message = "Les scores des matchs du " + tour.nom + " sont les suivants :\n"
-        self.view.afficher_message(message)
+        self.vue.afficher_message(message)
         for match in tour.matchs:
-            """message = match.joueur_1.nom + " contre " + match.joueur_2.nom + " : " \
-                      + str(match.joueur_score_1) + " à " + str(match.joueur_score_2)"""
             message = match.__str__()
-            self.view.afficher_message(message)
+            self.vue.afficher_message(message)
+        message = "\nAppuyer sur ENTREE pour continuer ..."
+        self.vue.saisir_reponse(message)
 
     def calculer_points(self, tournoi, matchs):
         """Calcule les points accumulés par les joueurs lors d'un tour"""
@@ -53,4 +53,5 @@ class ControleurMatch:
         self.jouer_matchs(tour, tour.paires_joueurs)
         self.calculer_points(tournoi, tour.matchs)
         tour.ajouter_date_heure_fin(time.asctime())
-        self.view.afficher_points(tournoi, tour)
+        tournoi.changer_statut('Terminé')
+
