@@ -1,0 +1,5 @@
+[flake8]
+exclude = .git,env,__pycache__,flake_report,.gitignore,README.md,requirements.txt,db.pickle,z*
+max-line-length = 119
+format = html
+htmldir = flake_report

@@ -3,6 +3,7 @@
 from os import system
 from models.donnees import NOM_TOURS
 
+
 class Vue:
     """Vue du tournoi d'échecs."""
 
@@ -19,6 +20,7 @@ class Vue:
             }
         system('clear')
         print("\n<--- APPLICATION TOURNOIS D'ECHECS --->\n")
+        print("         - Menu principal -\n")
         for cle in menu_principal.keys():
             print('\n', cle, '--', menu_principal[cle])
         return len(menu_principal.keys())
@@ -42,11 +44,11 @@ class Vue:
         """Affiche le menu du choix du tournoi à gérer.
            Choix '2' du menu principal."""
         system('clear')
-        print("\n<--- GESTION DES TOURNOIS D'ECHECS --->")
+        print("\n<--- CHOIX DU TOURNOI --->")
         print("\n\nChoisissez un tournoi dans la liste ci-dessous :\n")
         for i in range(len(tournois)):
-            print(f"{i+1} -- {tournois[i].nom}")
-        print(f"0 -- Revenir au menu principal")
+            print(f"{i+1} -- {tournois[i].nom} ({tournois[i].statut})")
+        print("0 -- Revenir au menu principal")
 
     def afficher_menu_gerer_tournoi(self, tournoi):
         """Affiche le menu de gestion d'un tournoi.
@@ -58,7 +60,7 @@ class Vue:
             0: "Revenir au menu précédent"
             }
         system('clear')
-        print(f"<--- GESTION DU TOURNOI D'ECHEC {tournoi.nom} --->")
+        print(f"<--- GESTION DU TOURNOI D'ECHEC {tournoi.nom} de {tournoi.lieu} --->")
         for cle in menu_tournoi.keys():
             print('\n', cle, '--', menu_tournoi[cle])
         return len(menu_tournoi.keys())
@@ -67,17 +69,23 @@ class Vue:
         """Saisie les données d'un joueur s'il n'est pas répertorié.
            Choix '1' du menu principal."""
         print("\nEntrez :")
-        nom = input("\nle nom : ").capitalize()
         prenom = input("\nle prénom : ")
         date_naissance = input("\nla date de naissance : ")
         sexe = input("\nle sexe : ")
-        classement = int(input("\nle classement : "))
-        return (nom, prenom, date_naissance, sexe, classement)
+        while True:
+            try:
+                classement = int(input("\nle classement : "))
+                break
+            except ValueError:
+                message = "Merci d'entrer un nombre. Appuyer sur ENTREE pour continuer ..."
+                self.saisir_reponse(message)
+                continue
+        return (prenom, date_naissance, sexe, classement)
 
     def afficher_menu_choix_tour(self, tournoi, choix_menu):
         """Affiche le menu du choix du tour à gérer.
            Choix '2' (paires) et '3' (résultats) du menu de gestion d'un tournoi.
-           Les tours qui sont clôturés ne sont pasproposés."""
+           Les tours qui sont clôturés ne sont pas proposés."""
         nombre_tours_ouverts = 0
         nombre_tours_termines = 0
         for i in range(len(tournoi.tours)):
@@ -91,7 +99,7 @@ class Vue:
         print("\n---> Choisissez le tour dans la liste ci-dessous :\n")
         for i in range(len(NOM_TOURS) - nombre_tours):
             print(f"{i + nombre_tours + 1} -- {NOM_TOURS[i + nombre_tours]}")
-        print(f"0 -- Revenir au menu précédent")
+        print("0 -- Revenir au menu précédent")
         return nombre_tours
 
     def afficher_menu_editer_rapports(self):
@@ -104,7 +112,7 @@ class Vue:
             4: "Liste de tous les joueurs d'un tournoi (par ordre alphabétique)",
             5: "Liste de tous les joueurs d'un tournoi (par classement)",
             6: "Liste de tous les tours d'un tournoi",
-            7: "Liste de tous les matchs d'un tournoi",
+            7: "Liste de tous les matchs d'un tournoi (avec bilan des points acquis)",
             0: "Revenir au menu principal"
             }
         system('clear')
@@ -119,7 +127,8 @@ class Vue:
             choix = int(input("\nEntrez votre choix : "))
         except ValueError:
             return None
-        if choix in range(premier_choix_menu, nombre_choix) or choix == 0 :
+        # Si choix est un entier valide
+        if choix in range(premier_choix_menu, nombre_choix) or choix == 0:
             return choix
         else:
             return None
@@ -145,9 +154,8 @@ class Vue:
 
     def afficher_points_joueurs(self, tournoi, joueurs):
         """Affiche le total des points cumulés des joueurs du tournoi."""
-        print(f"\n---> Bilan des points des joueurs :\n")
+        print("\n---> Bilan des points des joueurs :\n")
         for joueur in joueurs:
             indice = tournoi.joueurs.index(joueur)
             print(f"\nLe joueur {joueur.nom} {joueur.prenom} a {tournoi.nombre_points[indice]} points.")
         input("\nTaper ENTREE pour continuer ...")
-

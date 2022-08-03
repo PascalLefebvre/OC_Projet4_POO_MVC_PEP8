@@ -1,8 +1,9 @@
 """Définit un tour (une ronde)"""
 
+
 class Tour:
     """Classe Tour
-    
+
        nom    = "Round1" ou "Round2" ou etc."""
 
     def __init__(self, nom, date_heure_debut):
@@ -15,10 +16,10 @@ class Tour:
 
     def ajouter_paire_joueurs(self, paire_joueurs):
         self.paires_joueurs.append(paire_joueurs)
-    
+
     def ajouter_match(self, match):
         self.matchs.append(match)
-    
-    def ajouter_date_heure_fin(self, date_heure_fin):
+
+    def cloturer(self, date_heure_fin, statut):
         self.date_heure_fin = date_heure_fin
-        self.statut = 'Terminé'
+        self.statut = statut

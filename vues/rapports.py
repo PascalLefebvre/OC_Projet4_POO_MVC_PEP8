@@ -1,7 +1,7 @@
 """Définit la vue pour l'affichage des rapports."""
 
 from os import system
-from models.donnees import NOMBRE_MATCHS
+
 
 class VueRapports:
     """Vue des rapports."""
@@ -20,19 +20,19 @@ class VueRapports:
         return joueurs_ordonnes
 
     def afficher_liste_tournois(self, tournois):
-        """Affiche la liste de tous les tournois."""
+        """Affiche la liste de tous les tournois et leur statut."""
         system('clear')
         print("\n<--- LISTE DES TOURNOIS --->\n")
         for i in range(len(tournois)):
             print(f"\n{i+1} -- {tournois[i].nom} de {tournois[i].lieu} ({tournois[i].statut})")
             print(f"     du {tournois[i].date_debut} au {tournois[i].date_fin} ")
         input("\nAppuyer sur ENTREE pour continuer ...")
-    
+
     def afficher_liste_tours(self, tournoi):
         """Affiche la liste des tours."""
         print(f"\n---> Liste des tours pour le tournoi {tournoi.nom} de {tournoi.lieu} :\n")
         for i in range(len(tournoi.tours)):
-            print(tournoi.tours[i].nom)
+            print(f"{tournoi.tours[i].nom} ({tournoi.tours[i].statut})")
         input("\nAppuyer sur ENTREE pour continuer ...")
 
     def afficher_liste_matchs(self, tournoi):

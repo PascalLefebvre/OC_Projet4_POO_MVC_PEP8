@@ -1,5 +1,6 @@
 """Définit un joueur qui participe à un tournoi"""
 
+
 class Joueur:
     """Classe joueur"""
 
@@ -9,7 +10,7 @@ class Joueur:
         self.date_naissance = date_naissance
         self.sexe = sexe
         self.classement = classement
-    
+
     def modifier_classement(self, classement):
         self.classement = classement
 
