@@ -5,7 +5,7 @@ from tinydb import TinyDB
 from models.donnees import NOMBRE_JOUEURS, NOM_FICHIER_STOCKAGE
 from models.joueur import Joueur
 from models.tournoi import Tournoi
-from utils.storage import StoragePickle
+from models.storage import StoragePickle
 
 
 class ControleurDonnees:
@@ -36,9 +36,16 @@ class ControleurDonnees:
         self.vue_rapports.afficher_liste_joueurs(self.joueurs, "ordre alphabetique")
         while len(tournoi.joueurs) < NOMBRE_JOUEURS:
             joueur_inscrit = None
-            message = "\nEntrez le nom du joueur à inscrire (" + str(len(tournoi.joueurs)+1) \
-                      + "/" + str(NOMBRE_JOUEURS) + "): "
-            nom = self.vue.saisir_reponse(message).capitalize()
+            # Vérifie que la saisie du nom est correcte.
+            while True:
+                message = "Entrez le nom du joueur à inscrire (" + str(len(tournoi.joueurs)+1) \
+                        + "/" + str(NOMBRE_JOUEURS) + "): "
+                nom = self.vue.saisir_reponse(message).capitalize()
+                if not nom.isalpha():
+                    message = "Le nom ne doit contenir que des lettres ! Appuyer sur ENTREE pour continuer ..."
+                    self.vue.saisir_reponse(message)
+                else:
+                    break
             # Recherche de l'existence d'un joueur et inscription de celui-ci si trouvé.
             for i in range(len(self.joueurs)):
                 if nom.lower() == self.joueurs[i].nom.lower():

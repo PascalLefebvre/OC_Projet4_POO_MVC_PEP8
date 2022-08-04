@@ -1,1 +1,0 @@
-"""Paquet des utilitaires"""

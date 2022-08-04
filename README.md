@@ -23,8 +23,8 @@
   alors générer les différents rapports et mettre à jour le classement des joueurs
   (accessible uniquement si tous les tournois ont été clôturés).
   
-  A noter que la base de données est stockée dans le fichier "db.pickle", l'outil
-  Pickle étant utilisé pour la (dé)sérialisation des données.
+  A noter que la base de données est stockée dans le fichier "database/db.pickle",
+  l'outil Pickle étant utilisé pour la (dé)sérialisation des données.
 
 * Après avoir créé un nouveau tournoi, vous pouvez le gérer en le sélectionnant via
   l'option "Gérer un tournoi" du menu principal.

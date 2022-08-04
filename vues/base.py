@@ -47,7 +47,7 @@ class Vue:
         print("\n<--- CHOIX DU TOURNOI --->")
         print("\n\nChoisissez un tournoi dans la liste ci-dessous :\n")
         for i in range(len(tournois)):
-            print(f"{i+1} -- {tournois[i].nom} ({tournois[i].statut})")
+            print(f"{i+1} -- {tournois[i].nom} de {tournois[i].lieu} ({tournois[i].statut})")
         print("0 -- Revenir au menu principal")
 
     def afficher_menu_gerer_tournoi(self, tournoi):
@@ -150,7 +150,6 @@ class Vue:
     def afficher_classement_joueur(self, joueur):
         """Affiche le classement d'un joueur"""
         print(joueur)
-        input("\nTaper ENTREE pour continuer ...")
 
     def afficher_points_joueurs(self, tournoi, joueurs):
         """Affiche le total des points cumulés des joueurs du tournoi."""

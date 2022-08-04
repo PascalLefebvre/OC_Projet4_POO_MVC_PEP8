@@ -91,7 +91,8 @@ class ControleurMenu:
         choix = self.vue.saisir_choix(self.PREMIER_CHOIX_MENU, nombre_choix)
         if choix is None:
             message = "Choix invalide. Merci d'entrer un chiffre entre " + \
-                      str(self.PREMIER_CHOIX_MENU) + " et " + str(nombre_choix-1)
+                      str(self.PREMIER_CHOIX_MENU) + " et " + str(nombre_choix-1) + \
+                      "\nAppuyer sur ENTREE pour continuer ..."
             self.vue.saisir_reponse(message)
         return choix
 
@@ -161,12 +162,12 @@ class ControleurMenu:
                           "\n\nAppuyer sur ENTREE pour continuer ...\n"
                 self.vue.saisir_reponse(message)
                 return
+        system('clear')
+        message = "\n<--- MODIFICATION DU CLASSEMENT --->"
+        self.vue.afficher_message(message)
+        self.vue_rapports.afficher_liste_joueurs(self.joueurs, "ordre alphabetique")
         while True:
-            system('clear')
-            message = "\n<--- MODIFICATION DU CLASSEMENT --->"
-            self.vue.afficher_message(message)
-            self.vue_rapports.afficher_liste_joueurs(self.joueurs, "ordre alphabetique")
-            message = "\nEntrez le nom du joueur concerné ( '0' pour quitter): "
+            message = "Entrez le nom du joueur ('0' pour quitter): "
             nom = self.vue.saisir_reponse(message)
             # Sortie du menu.
             if nom == '0':
@@ -175,15 +176,21 @@ class ControleurMenu:
             # Mise à jour du classement si le nom du joueur est répertorié.
             for i in range(len(self.joueurs)):
                 if nom.lower() == self.joueurs[i].nom.lower():
-                    self.vue.afficher_classement_joueur(self.joueurs[i])
-                    message = "\nEntrez le nouveau classement : "
-                    classement = int(self.vue.saisir_reponse(message))
-                    self.joueurs[i].modifier_classement(classement)
-                    self.vue.afficher_classement_joueur(self.joueurs[i])
                     joueur_trouve = True
+                    self.vue.afficher_classement_joueur(self.joueurs[i])
+                    while True:
+                        message = "Entrez le nouveau classement : "
+                        try:
+                            classement = int(self.vue.saisir_reponse(message))
+                        except:
+                            message = "Merci d'entrer un nombre. Appuyer sur ENTREE pour continuer ..."
+                            self.vue.saisir_reponse(message)
+                        else:
+                            self.joueurs[i].modifier_classement(classement)
+                            self.vue.afficher_classement_joueur(self.joueurs[i])
+                            break
+                if joueur_trouve:
                     break
-            if joueur_trouve:
-                break
             else:
                 message = "Le joueur " + nom + " est inconnu !!!\n\nAppuyer sur ENTREE pour continuer ...\n"
                 self.vue.saisir_reponse(message)
@@ -195,7 +202,7 @@ class ControleurMenu:
             choix = self.vue.saisir_choix(self.PREMIER_CHOIX_MENU, nombre_choix)
             if choix is None:
                 message = "Choix invalide. Merci d'entrer un chiffre entre " + \
-                          str(self.PREMIER_CHOIX_MENU) + " et " + str(nombre_choix-1)
+                        str(self.PREMIER_CHOIX_MENU) + " et " + str(nombre_choix-1)
                 self.vue.saisir_reponse(message)
             # Sortie du menu.
             elif choix == 0:
@@ -213,13 +220,14 @@ class ControleurMenu:
                     if choix_tournoi == 0:
                         break
                     # Décalage de "-1" entre le numéro du choix et l'indice du tournoi correspondant.
-                    tournoi_en_cours = self.tournois[choix_tournoi-1]
-                    if choix == 4:
-                        self.vue_rapports.afficher_liste_joueurs(tournoi_en_cours.joueurs, "ordre alphabetique")
-                    elif choix == 5:
-                        self.vue_rapports.afficher_liste_joueurs(tournoi_en_cours.joueurs, "classement")
-                    elif choix == 6:
-                        self.vue_rapports.afficher_liste_tours(tournoi_en_cours)
-                    elif choix == 7:
-                        self.vue_rapports.afficher_liste_matchs(tournoi_en_cours)
-                        self.vue.afficher_points_joueurs(tournoi_en_cours, tournoi_en_cours.joueurs)
+                    if choix_tournoi is not None:
+                        tournoi_en_cours = self.tournois[choix_tournoi-1]
+                        if choix == 4:
+                            self.vue_rapports.afficher_liste_joueurs(tournoi_en_cours.joueurs, "ordre alphabetique")
+                        elif choix == 5:
+                            self.vue_rapports.afficher_liste_joueurs(tournoi_en_cours.joueurs, "classement")
+                        elif choix == 6:
+                            self.vue_rapports.afficher_liste_tours(tournoi_en_cours)
+                        elif choix == 7:
+                            self.vue_rapports.afficher_liste_matchs(tournoi_en_cours)
+                            self.vue.afficher_points_joueurs(tournoi_en_cours, tournoi_en_cours.joueurs)
