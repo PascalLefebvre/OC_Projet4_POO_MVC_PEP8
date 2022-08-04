@@ -23,7 +23,6 @@ class ControleurMatch:
         if len(tournoi.tours) == NOMBRE_TOURS:
             tournoi.changer_statut('Terminé')
 
-
     def jouer_matchs(self, tour, paires_joueurs):
         """Crée tous les matchs d'un tour et les joue de façon aléatoire."""
         for paires in paires_joueurs:
