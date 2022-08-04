@@ -30,7 +30,9 @@ class Vue:
            Choix '1' du menu principal."""
         system('clear')
         print("\n<--- CREATION D'UN TOURNOI --->\n\nEntrez :")
-        name = input("\nle nom : ")
+        nom = ''
+        while not nom:
+            nom = input("\nle nom : ")
         lieu = input("\nle lieu : ")
         date_debut = input("\nla date de début : ")
         date_fin = input(f"\nla date de fin ({date_debut} par défaut) : ")
@@ -38,7 +40,7 @@ class Vue:
             date_fin = date_debut
         controle_temps = input("\nle contrôle du temps (bullet, blitz ou coup rapide) : ")
         description = input("\nun commentaire : ")
-        return (name, lieu, description, date_debut, date_fin, controle_temps)
+        return (nom, lieu, description, date_debut, date_fin, controle_temps)
 
     def afficher_menu_choix_tournoi(self, tournois):
         """Affiche le menu du choix du tournoi à gérer.

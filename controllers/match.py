@@ -3,7 +3,7 @@
 import time
 from random import randint
 
-from models.donnees import NOMBRE_MATCHS
+from models.donnees import NOMBRE_TOURS, NOMBRE_MATCHS
 from models.match import Match
 
 
@@ -20,6 +20,9 @@ class ControleurMatch:
         self.jouer_matchs(tour, tour.paires_joueurs)
         self.calculer_points_joueurs(tournoi, tour.matchs)
         tour.cloturer(time.asctime(), 'Terminé')
+        if len(tournoi.tours) == NOMBRE_TOURS:
+            tournoi.changer_statut('Terminé')
+
 
     def jouer_matchs(self, tour, paires_joueurs):
         """Crée tous les matchs d'un tour et les joue de façon aléatoire."""

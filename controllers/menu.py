@@ -2,9 +2,11 @@
 
 from os import system
 
-from .match import ControleurMatch
+from models.donnees import Donnees
+from .joueur import ControleurJoueur
+from .tournoi import ControleurTournoi
 from .tour import ControleurTour
-from .donnees import ControleurDonnees
+from .match import ControleurMatch
 
 
 class ControleurMenu:
@@ -14,11 +16,13 @@ class ControleurMenu:
         """A deux vues : une pour la gestion des menus et une pour celle des rapports."""
         self.vue = vue
         self.vue_rapports = vue_rapports
-        self.controleur_match = ControleurMatch(self.vue)
+        self.donnees = Donnees()
+        self.joueurs = self.donnees.joueurs
+        self.tournois = self.donnees.tournois
+        self.controleur_joueur = ControleurJoueur(self.vue, self.vue_rapports, self.joueurs)
+        self.controleur_tournoi = ControleurTournoi(self.vue, self.tournois)
         self.controleur_tour = ControleurTour(self.vue, self.vue_rapports)
-        self.controleur_donnees = ControleurDonnees(self.vue, self.vue_rapports)
-        self.joueurs = self.controleur_donnees.joueurs
-        self.tournois = self.controleur_donnees.tournois
+        self.controleur_match = ControleurMatch(self.vue)
         self.PREMIER_CHOIX_MENU = 0
 
     def gerer_menu_principal(self):
@@ -37,7 +41,7 @@ class ControleurMenu:
                     exit()
             # Création d'un tournoi.
             elif choix == 1:
-                self.controleur_donnees.creer_tournoi()
+                self.controleur_tournoi.creer_tournoi()
             # Gestion d'un tournoi.
             elif choix == 2:
                 self.gerer_menu_tournoi()
@@ -49,10 +53,17 @@ class ControleurMenu:
                 self.gerer_menu_rapports()
             # Sauvegarde des joueurs et tournois dans la base de données.
             elif choix == 5:
-                self.controleur_donnees.sauvegarder_donnees()
+                self.donnees.sauvegarder()
+                message = "\nSauvegarde effectuée ...\n\nAppuyer sur ENTREE pour continuer ..."
+                self.vue.saisir_reponse(message)
             # Restauration des joueurs et tournois depuis la base de données.
             elif choix == 6:
-                self.controleur_donnees.restaurer_donnees()
+                if not self.donnees.donnees_restaurees:
+                    self.donnees.restaurer()
+                    message = "\nRestauration effectuée ...\n\nAppuyer sur ENTREE pour continuer ..."
+                else:
+                    message = "\nRestauration déjà effectuée ...\n\nAppuyer sur ENTREE pour continuer ..."
+                self.vue.saisir_reponse(message)
 
     def gerer_menu_tournoi(self):
         """Gère le menu de gestion d'un tournoi :
@@ -79,14 +90,14 @@ class ControleurMenu:
                         break
                     # Inscription des joueurs à un tournoi.
                     elif choix == 1:
-                        self.controleur_donnees.inscrire_joueurs(tournoi_en_cours)
+                        self.controleur_joueur.inscrire_joueurs(tournoi_en_cours)
                     # Affichage du menu de sélection du tour à gérer.
                     else:
                         self.gerer_menu_liste_tours(tournoi_en_cours, choix)
 
     def gerer_menu_liste_tournois(self):
         """Choisit le tournoi à gérer"""
-        self.vue.afficher_menu_choix_tournoi(self.controleur_donnees.tournois)
+        self.vue.afficher_menu_choix_tournoi(self.tournois)
         nombre_choix = len(self.tournois)+1
         choix = self.vue.saisir_choix(self.PREMIER_CHOIX_MENU, nombre_choix)
         if choix is None:
@@ -182,7 +193,7 @@ class ControleurMenu:
                         message = "Entrez le nouveau classement : "
                         try:
                             classement = int(self.vue.saisir_reponse(message))
-                        except:
+                        except ValueError:
                             message = "Merci d'entrer un nombre. Appuyer sur ENTREE pour continuer ..."
                             self.vue.saisir_reponse(message)
                         else:
